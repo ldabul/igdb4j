@@ -1,0 +1,68 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.8
+
+configurations {
+	provided
+	compile.exclude group: 'commons-logging', module: 'commons-logging'
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'com.igdb'
+			version = '0.1'
+			artifactId 'igdb4j'
+		}
+	}
+}
+
+sourceSets {
+	main.compileClasspath += configurations.provided
+	test.compileClasspath += configurations.provided
+	test.runtimeClasspath += configurations.provided
+}
+
+eclipse.project {
+	natures 'org.springsource.ide.eclipse.gradle.core.nature'
+}
+
+eclipse.classpath {
+	plusConfigurations += [configurations.provided]
+	defaultOutputDir = file('build')
+}
+
+dependencies {
+	// lombok
+	compile 'org.projectlombok:lombok:1.16.10'
+	
+	// commons
+	compile 'org.apache.commons:commons-collections4:4.1'
+	compile 'org.apache.commons:commons-lang3:3.4'
+	compile 'commons-io:commons-io:2.5'
+	compile 'org.apache.httpcomponents:httpclient:4.5.2'
+	
+	// slf4j
+	compile 'ch.qos.logback:logback-classic:1.1.7'
+	compile 'org.slf4j:jcl-over-slf4j:1.7.21'
+		
+	// json
+	compile 'com.fasterxml.jackson.core:jackson-core:2.8.1'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.1'
+	
+	// Spring
+	compile 'org.springframework:spring-web:4.3.2.RELEASE'
+
+	// tests
+	testCompile 'junit:junit:4.12'
+	testCompile 'org.powermock:powermock-module-junit4:1.6.5'
+	testCompile 'org.powermock:powermock-api-mockito:1.6.5'
+	testCompile 'org.springframework:spring-test:4.3.2.RELEASE'
+}
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
